@@ -207,6 +207,9 @@
       "metadata": {
           "description": "Endpoint for Service Fabric Reverse proxy"
       }
+    },
+    "subnetId": {
+      "type": "string"
     }
   },
   "variables": {
@@ -225,8 +228,6 @@
     "lbIPName": "PublicIP-LB-FE",
     "availSetName": "AvailabilitySet",
     "maxPercentUpgradeDomainDeltaUnhealthyNodes": "100",
-    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
-    "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]",
     "overProvision": "false",
     "vmssApiVersion": "2016-03-30",
     "lbApiVersion": "2015-06-15",
@@ -259,35 +260,7 @@
     ]
   },
   "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('vnetName')]",
-      "apiVersion": "[variables('vnetApiversion')]",
-      "location": "[variables('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('vnetAddressSpace')]"
-          ]
-        },
-        "subnets": [            
-          {
-            "name": "[parameters('sfSubnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('sfSubnetSpace')]",
-              "networkSecurityGroup": {
-                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-              }
-            }
-          }
-        ],
-        "virtualNetworkPeerings": []
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-      ]
-    },
-    {
+   {
       "apiVersion": "[variables('storageApiVersion')]",
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('supportLogStorageAccountName')]",
@@ -713,7 +686,7 @@
                     "nodeTypeRef": "[variables('vmNodeType0Name')]",
                     "dataPath": "D:\\\\SvcFab",
                     "durabilityLevel": "Bronze",
-                    "nicPrefixOverride": "[reference(variables('subnetId'), parameters('vnetVersion')).addressPrefix]",
+                    "nicPrefixOverride": "[reference(parameters('subnetId'), parameters('vnetVersion')).addressPrefix]",
                     "certificate": {
                       "thumbprint": "[parameters('certificateThumbprint')]",
                       "x509StoreName": "[parameters('certificateStoreValue')]"
@@ -796,7 +769,7 @@
                           }
                         ],
                         "subnet": {
-                          "id": "[variables('subnetId')]"
+                          "id": "[parameters('subnetId')]"
                         }
                       }
                     }
