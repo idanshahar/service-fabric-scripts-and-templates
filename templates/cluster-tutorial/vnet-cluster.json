@@ -2,22 +2,6 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vnetName": {
-      "defaultValue": "sf-vnet",
-      "type": "string"
-    },
-    "vnetAddressSpace": {
-      "defaultValue": "172.16.0.0/20",
-      "type": "string"
-    },
-    "sfSubnetName": {
-      "defaultValue": "sf-subnet",
-      "type": "string"
-    },
-    "sfSubnetSpace": {
-      "defaultValue": "172.16.2.0/23",
-      "type": "string"
-    },
     "location": {      
             "type": "string",      
             "defaultValue": "[resourceGroup().location]",      
@@ -44,25 +28,11 @@
         "description": "Remote desktop user password. Must be a strong password"
       }
     },
-    "vnetName": {
-      "defaultValue": "sf-vnet",
-      "type": "string",
-      "metadata": {
-        "description": "The name of the VNET that contains the Service Fabric cluster and API Management service deployment."
-      }
-    },
     "vnetVersion": {
       "type": "string",
       "defaultValue": "2017-03-01",
       "metadata": {
         "description": "The version of the VNET resource to which the subnet belongs as defined by the subnetName parameter."
-      }
-    },
-    "subnetName": {
-      "type": "string",
-      "defaultValue": "sf-subnet",
-      "metadata": {
-        "description": "The name subnet to deploy the Service Fabric cluster to. This subnet must be in the same VNET that contains the API Management service deployment."
       }
     },
     "networkSecurityGroupName": {
@@ -260,34 +230,6 @@
     ]
   },
   "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('vnetName')]",
-      "apiVersion": "[variables('vnetApiversion')]",
-      "location": "[variables('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('vnetAddressSpace')]"
-          ]
-        },
-        "subnets": [            
-          {
-            "name": "[parameters('sfSubnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('sfSubnetSpace')]",
-              "networkSecurityGroup": {
-                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-              }
-            }
-          }
-        ],
-        "virtualNetworkPeerings": []
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-      ]
-    },
    {
       "apiVersion": "[variables('storageApiVersion')]",
       "type": "Microsoft.Storage/storageAccounts",
@@ -926,25 +868,13 @@
     }
   ],
   "outputs": {
-    "vnet": {
-      "type": "object",
-      "value": "[reference(parameters('vnetName'))]"
-    },
     "vnetVersion": {
       "type": "string",
       "value": "[variables('vnetApiVersion')]"
     },
-    "vnetName": {
-      "type": "string",
-      "value": "[parameters('vnetName')]"
-    },
     "sgVersion": {
       "type": "string",
       "value": "[variables('sgApiVersion')]"
-    },
-    "sfSubnetName": {
-      "type": "string",
-      "value": "[parameters('sfSubnetName')]"
     },
     "sfSgName": {
       "type": "string",

@@ -2,23 +2,11 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vnetName": {
-      "value": "sf-vnet"
-    },
-    "vnetAddressSpace": {
-      "value": "172.16.0.0/20"
-    },
-    "sfSubnetSpace": {
-      "value": "172.16.2.0/23"
-    },
-    "sfSubnetName": {
-      "value": "sf-subnet"
-    },
     "location":{
-      "value": "southcentralus"
+      "value": "westeurope"
     },
     "clusterName": {
-      "value": "mysfcluster123"
+      "value": "sf1233"
     },
     "adminUserName": {
       "value": "adminuser"
@@ -29,17 +17,14 @@
     "certificateThumbprint": {
       "value": ""
     },
-    "sourceVaultvalue": {
+    "sourceVaultValue": {
       "value": ""
     },
-    "certificateUrlvalue": {
+    "certificateUrlValue": {
       "value": ""
     },
-    "subnetName": {
-      "value": "sf-subnet"
-    },
-    "networkSecurityGroupName": {
-      "value": "sf-vnet-security"
+    "subnetId": {
+      "value": ""
     },
     "vmImagePublisher": {
       "value": "MicrosoftWindowsServer"
